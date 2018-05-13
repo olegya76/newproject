@@ -1,11 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+{% load staticfiles %}
+<html>
   <head>
     <meta charset="utf-8">
-    <title>Test App</title>
+    <title>Django Level Two</title>
+    <link rel="stylesheet" href="{% static "css/mystyle.css" %}"/>
   </head>
   <body>
-    <h1>Hello this is index.html</h1>
-    {{insert_me}}
+    <h1>Hi, welcome to Django Level Two!</h1>
+    <h2>Here are your access records:</h2>
+    <div class="djangtwo">
+      {% if reklama %}
+          <table>
+            <thead>
+              <th>Reklama Name</th>
+              <th>Rekvesit</th>
+              <th>Mail</th>
+            </thead>
+
+            {% for acc in reklama %}
+              <tr>
+                <td>{{ acc.reklama_name }}</td>
+                <td>{{ acc.rekvesit }}</td>
+                <td>{{ acc.mail}}</td>
+              </tr>
+            {% endfor %}
+        </table>
+
+      {% else %}
+        <p>No Reklama. Table Not Created.</p>
+      {% endif %}
+    </div>
+
+
   </body>
 </html>

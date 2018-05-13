@@ -1,0 +1,4 @@
+﻿insert into testapp_reklama (reklama_name, rekvesit, mail) values
+('qwe', '132231', '1123.123'),
+('rty', '756688', '24234.123'),
+('uio', '654664', '324.123');
