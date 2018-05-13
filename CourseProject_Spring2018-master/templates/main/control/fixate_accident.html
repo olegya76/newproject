@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Фиксация ДТП</title>
+    {% include 'public/fonts.html' %}
+    <link rel="stylesheet" href="">
+  </head>
+  {% include 'public/header.html' %}
+  <body>
+    <div class="content">
+      <form method="post">
+        {% csrf_token %}
+        {{ FixateAccidentForm.as_p }}
+        <input type="submit" name="fixate_accident" value="Зафиксировать">
+      </form>
+    </div>
+  </body>
+</html>
