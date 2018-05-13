@@ -16,3 +16,8 @@ def index(request):
     reklama_list = Reklama.objects.order_by('mail')
     reklama_dict = {"reklama":reklama_list}
     return render(request,'testapp/index.html',reklama_dict)
+
+def reklama(request):
+    reklama_list = Reklama.objects.order_by('mail')
+    reklama_dict = {"reklama":reklama_list}
+    return render(request, 'testapp/reklama.html', context = reklama_dict)

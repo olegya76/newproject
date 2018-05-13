@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Reklama</title>
+    <link rel="stylesheet" href="{% static "css/reklama.css" %}"/>
+  </head>
+  <body>
+    <h1>Reklama Table!</h1>
+    <div class="vivod">
+      {% if reklama %}
+          <table>
+            <thead>
+              <th>Reklama Name</th>
+              <th>Rekvesit</th>
+              <th>Mail</th>
+            </thead>
+
+            {% for acc in reklama %}
+              <tr>
+                <td>{{ acc.reklama_name }}</td>
+                <td>{{ acc.rekvesit }}</td>
+                <td>{{ acc.mail}}</td>
+              </tr>
+            {% endfor %}
+        </table>
+
+      {% else %}
+        <p>No Reklama. Table Not Created.</p>
+      {% endif %}
+    </div>
+
+
+  </body>
+</html>
