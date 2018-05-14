@@ -23,4 +23,5 @@ urlpatterns = [
     path(r'',views.index, name = 'index'),
     url(r'^testapp/',include('testapp.urls')),
     path('admin/', admin.site.urls),
+    path('reklama/', views.form_reklama_view, name = 'form_reklama')
 ]

@@ -10,26 +10,7 @@
     <h1>Hi, welcome to Django Level Two!</h1>
     <h2>Here are your access records:</h2>
     <div class="djangtwo">
-      {% if reklama %}
-          <table>
-            <thead>
-              <th>Reklama Name</th>
-              <th>Rekvesit</th>
-              <th>Mail</th>
-            </thead>
-
-            {% for acc in reklama %}
-              <tr>
-                <td>{{ acc.reklama_name }}</td>
-                <td>{{ acc.rekvesit }}</td>
-                <td>{{ acc.mail}}</td>
-              </tr>
-            {% endfor %}
-        </table>
-
-      {% else %}
-        <p>No Reklama. Table Not Created.</p>
-      {% endif %}
+      <h1>INDEX.HTML</h1>
     </div>
 
 

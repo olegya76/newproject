@@ -1,7 +1,5 @@
-vivod{
-  border: 1px solid red
-}
-div{
+
+table, th, td{
   color: red;
   border: 1px solid red
 }
