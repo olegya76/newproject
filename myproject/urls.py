@@ -23,5 +23,11 @@ urlpatterns = [
     path(r'',views.index, name = 'index'),
     url(r'^testapp/',include('testapp.urls')),
     path('admin/', admin.site.urls),
-    path('reklama/', views.form_reklama_view, name = 'form_reklama')
+    path('reklama/', views.form_reklama_view, name = 'form_reklama'),
+    path('control/', views.control_view, name = 'control_main'),
+    path('control/reklama/', views.reklama_control_view, name = 'control_reklama'),
+    path('control/peredacha/', views.peredacha_control_view, name = 'control_peredacha'),
+    path('control/dolznost/', views.dolznost_control_view, name = 'control_dolznost'),
+    path('control/sotrudnik/', views.sotrudnik_control_view, name = 'control_sotrudnik'),
+
 ]

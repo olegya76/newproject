@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+{% extends "testapp/base.html"%}
+  {% block body_block %}
+    <h1>Управление рекламами</h1>
+    <div class="container">
+      <h1>Добавить рекламу</h1>
+      <form method="POST">
+        {{ AddReklamaForm.as_p }}
+        {% csrf_token %}
+        <input type="submit" class='btn btn-primary' name="add" value="Добавить">
+      </form>
+    </div>
+
+    <div class="container">
+      <h1>Изменить рекламу</h1>
+      <form method="POST">
+        {{ ChangeReklamaForm.as_p }}
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary" name="change" value="Изменить">
+      </form>
+
+    </div>
+
+    <div class="container">
+      <h1>Удалить рекламу</h1>
+      <form method="POST">
+        {{ DeleteReklamaForm.as_p }}
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary" name="delete" value="Удалить">
+      </form>
+    </div>
+
+    <div >
+      {% if reklama %}
+          <table class="table table-dark">
+            <thead>
+              <th scope="col">Reklama Name</th>
+              <th scope="col">Rekvesit</th>
+              <th scope="col">Mail</th>
+            </thead>
+
+            {% for acc in reklama %}
+              <tr>
+                <td>{{ acc.reklama_name }}</td>
+                <td>{{ acc.rekvesit }}</td>
+                <td>{{ acc.mail}}</td>
+              </tr>
+            {% endfor %}
+        </table>
+
+      {% else %}
+        <p>No Reklama. Table Not Created.</p>
+      {% endif %}
+    </div>
+    {% endblock %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% extends "testapp/base.html"%}
+  {% block body_block %}
+    <h1>Управление передачами</h1>
+    <div class="container">
+      <h1>Добавить передачу</h1>
+      <form method="POST">
+        {{ AddPeredachaForm.as_p }}
+        {% csrf_token %}
+        <input type="submit" class='btn btn-primary' name="add" value="Добавить">
+      </form>
+    </div>
+
+    <div class="container">
+      <h1>Изменить передачу</h1>
+      <form method="POST">
+        {{ ChangePeredachaForm.as_p }}
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary" name="change" value="Изменить">
+      </form>
+
+    </div>
+
+    <div class="container">
+      <h1>Удалить передачу</h1>
+      <form method="POST">
+        {{ DeletePeredachaForm.as_p }}
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary" name="delete" value="Удалить">
+      </form>
+    </div>
+
+    <div >
+      {% if peredacha %}
+          <table class="table table-dark">
+            <thead>
+              <th scope="col">Название передачи</th>
+              <th scope="col">Стоимость рекламы за минуту</th>
+              <th scope="col">Рейтинг</th>
+              <th scope="col">Студия</th>
+            </thead>
+
+            {% for acc in peredacha %}
+              <tr>
+                <td>{{ acc.peredacha_name }}</td>
+                <td>{{ acc.rek_stoim_for_min }}</td>
+                <td>{{ acc.rating}}</td>
+                <td>{{ acc.studiya}}</td>
+              </tr>
+            {% endfor %}
+        </table>
+
+      {% else %}
+        <p>No Reklama. Table Not Created.</p>
+      {% endif %}
+    </div>
+    {% endblock %}

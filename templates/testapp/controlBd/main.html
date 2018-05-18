@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+{% extends "testapp/base.html"%}
+  {% block body_block %}
+
+    <div class="container">
+      <li><a href="{% url 'control_reklama' %}">Управление рекламами</a></li>
+      <li><a href="{% url 'control_peredacha' %}">Управление передачами</a></li>
+      <li><a href="{% url 'control_dolznost' %}">Управление должностями</a></li>
+      <li><a href="{% url 'control_sotrudnik' %}">Управление сотрудниками</a></li>
+    </div>
+
+    {% endblock %}
