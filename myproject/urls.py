@@ -29,5 +29,6 @@ urlpatterns = [
     path('control/peredacha/', views.peredacha_control_view, name = 'control_peredacha'),
     path('control/dolznost/', views.dolznost_control_view, name = 'control_dolznost'),
     path('control/sotrudnik/', views.sotrudnik_control_view, name = 'control_sotrudnik'),
-
+    path('<int:pk>/delete', views.delete_sotrudnik, name='delete'),
+    path('<int:pk>/change', views.change_sotrudnik, name='change'),
 ]

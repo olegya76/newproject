@@ -1,17 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from .models import *
 from . import forms
-
-# Create your views here.
-
-# Our original index view function
-# Corresponds to original_index.html (rename it to index.html to use it!)
-
-# def index(request):
-#     my_dict = {'insert_me':"Now I am coming from first_app/index.html!"}
-#     # Make sure this is pointing to the correct index
-#     return render(request,'first_app/index.html',context=my_dict)
+from django.shortcuts import render, get_object_or_404
 
 
 def index(request):
@@ -112,12 +104,10 @@ def peredacha_control_view(request):
     return render(request, 'testapp/controlBd/control_peredacha.html', {'AddPeredachaForm': forms.AddPeredachaForm(prefix = 'Adding'), 'ChangePeredachaForm': forms.ChangePeredachaForm(prefix='Changing'), 'DeletePeredachaForm': forms.DeletePeredachaForm(prefix='Deleting'), "peredacha":peredacha_list})
 
 
-#Управление должности
+"""Управление должности"""
 def dolznost_control_view(request):
     dolznost_list = Dolznost.objects.order_by('dolznost_name')
-
     if request.method == 'POST':
-        type = None
         if 'add' in request.POST:
             AddDolznost = forms.AddDolznostForm(request.POST, prefix='Adding')
             if AddDolznost.is_valid():
@@ -138,34 +128,49 @@ def dolznost_control_view(request):
     return render(request, 'testapp/controlBd/control_dolznost.html', {'AddDolznostForm': forms.AddDolznostForm(prefix = 'Adding'), 'ChangeDolznostForm': forms.ChangeDolznostForm(prefix='Changing'), 'DeleteDolznostForm': forms.DeleteDolznostForm(prefix='Deleting'), "dolznost":dolznost_list})
 
 
-#Управление ссотрудники
+"""Управление сотрудники"""
 def sotrudnik_control_view(request):
     sotrudnik_list = Sotrudnik.objects.order_by('id')
+    form = forms.SotrudnikForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('control_sotrudnik'))
+    context = {
+        'SotrudnikForm' : form,
+        "sotrudnik":sotrudnik_list
+        }
+    return render(request, 'testapp/controlBd/control_sotrudnik.html', context)
 
-    if request.method == 'POST':
-        type = None
-        if 'add' in request.POST:
-            AddSotrudnik = forms.AddSotrudnikForm(request.POST, prefix='Adding')
-            if AddSotrudnik.is_valid():
-                change_sotrudnik = AddSotrudnik.save(commit = False)
-                change_sotrudnik.id_dolznost = request.POST.get('Adding-dolznost')
-                change_sotrudnik.save()
-                print(request.POST.get('Adding-dolznost'))
-                print(change_sotrudnik)
-                AddSotrudnik.save_m2m()
-            else :
-                print('error valid')
-        # elif 'change' in request.POST:
-        #     ChangeSotrudnik = forms.ChangeSotrudnikForm(request.POST, prefix='Changing')
-        #     #что-то с ВАЛИДАЦИЕЙ
-        #     id_sotrudnik_name = request.POST.get('Changing-sotrudnik_id')
-        #     new_sotrudnik_name = request.POST.get('Changing-name')
-        #     new_oklad = request.POST.get('Changing-oklad')
-        #     Dolznost.objects.filter(dolznost_name = dolznost_name).update(dolznost_name = new_dolznost_name)
-        # elif 'delete' in request.POST:
-        #     DeleteDolznost = forms.DeleteDolznostForm(request.POST, prefix = 'Deleting')
-        #     #валидация
-        #     dolznost_name = request.POST.get('Deleting-dolznost')
-        #     Dolznost.objects.filter(dolznost_name = dolz_name).delete()
+def delete_sotrudnik(request, pk):
+    print('delete')
+    item = get_object_or_404(Sotrudnik,  pk=pk)
+    item.delete()
+    return HttpResponseRedirect(reverse('control_sotrudnik'))
 
-    return render(request, 'testapp/controlBd/control_sotrudnik.html', {'AddSotrudnikForm': forms.AddSotrudnikForm(prefix = 'Adding'), 'ChangeSotrudnikForm': forms.ChangeSotrudnikForm(prefix='Changing'), 'DeleteSotrudnikForm': forms.DeleteSotrudnikForm(prefix='Deleting'), "sotrudnik":sotrudnik_list})
+def change_sotrudnik(request, pk):
+    print('change')
+    sotrudnik_list = Sotrudnik.objects.order_by('id')
+    item = get_object_or_404(Sotrudnik, pk = pk)
+    form = forms.SotrudnikForm(request.POST or None, instance = item)
+    if 'change' in request.POST:
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('control_sotrudnik'))
+        context = {
+            'SotrudnikForm' : form,
+            "sotrudnik":sotrudnik_list
+            }
+        print('error valid')
+        return render(request, 'testapp/controlBd/control_sotrudnik.html', context)
+    elif 'add' in request.POST:
+        form = forms.SotrudnikForm(request.POST or None)
+        context = {
+            'SotrudnikForm' : form,
+            "sotrudnik":sotrudnik_list
+            }
+        return HttpResponseRedirect(reverse('control_sotrudnik'))
+    context = {
+        'SotrudnikForm' : form,
+        "sotrudnik":sotrudnik_list
+        }
+    return render(request, 'testapp/controlBd/control_sotrudnik_change.html', context)

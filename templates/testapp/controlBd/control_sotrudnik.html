@@ -19,32 +19,11 @@
     <div class="container">
       <h1>Добавить сотрудника</h1>
       <form method="POST">
-        {{ AddSotrudnikForm.as_p }}
+        {{ SotrudnikForm.as_p }}
         {% csrf_token %}
         <input type="submit" class='btn btn-primary' name="add" value="Добавить">
       </form>
     </div>
-
-    <div class="container">
-      <h1>Изменить данные про сотрудника</h1>
-      <form method="POST">
-        {{ ChangeSotrudnikForm.as_p }}
-        {% csrf_token %}
-        <input type="submit" class="btn btn-primary" name="change" value="Изменить">
-      </form>
-
-    </div>
-
-    <div class="container">
-      <h1>Удалить Сотрудника</h1>
-      <form method="POST">
-        {{ DeleteSotrudnikForm.as_p }}
-        {% csrf_token %}
-        <input type="submit" class="btn btn-primary" name="delete" value="Удалить">
-      </form>
-    </div>
-
-
     <div >
       {% if sotrudnik %}
           <table class="table table-dark">
@@ -58,9 +37,11 @@
               <th scope="col">Паспортные данные</th>
               <th scope="col">Должность</th>
               <th scope="col">Дата приема на работу</th>
+              <th scope="col">Удалить</th>
+              <th scope="col">Изменить</th>
             </thead>
 
-            {% for acc in dolznost %}
+            {% for acc in sotrudnik %}
               <tr>
                 <td>{{ acc.id }}</td>
                 <td>{{ acc.fam }}</td>
@@ -71,6 +52,8 @@
                 <td>{{ acc.passport_number }}</td>
                 <td>{{ acc.id_dolznost }}</td>
                 <td>{{ acc.data_priom }}</td>
+                <td><a href='{% url 'delete' acc.pk %}' >delete</a></td>
+                <td><a href='{% url 'change' acc.pk %}' >change</a></td>
               </tr>
             {% endfor %}
         </table>

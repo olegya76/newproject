@@ -111,13 +111,13 @@ class DeleteDolznostForm(forms.Form):
     dolznost = forms.ModelChoiceField(queryset=models.Dolznost.objects.values_list('dolznost_name', flat=True), empty_label=None, label='Выберите должность')
 
 """Управление: Сотрудник"""
-#Добавление сотрудника
-class AddSotrudnikForm(forms.ModelForm):
-    dolznost = forms.ModelChoiceField(queryset=models.Dolznost.objects.values_list('dolznost_name', flat=True), empty_label=None, label='Выберите должность')
+class SotrudnikForm(forms.ModelForm):
+    id_dolznost = forms.ModelChoiceField(
+    queryset=models.Dolznost.objects.all(), empty_label=None,
+    label='Выберите должность')
     class Meta():
         model = models.Sotrudnik
         fields = '__all__'
-        exclude = ['id_dolznost']
         labels = {
             'fam': 'Фамилия',
             'name': 'Имя',
@@ -127,12 +127,11 @@ class AddSotrudnikForm(forms.ModelForm):
             'passport_number': 'Паспорт',
             'data_priom': 'Дата приема на работу',
         }
-#Изменение должности
+"""Изменение сотрудника"""
 class ChangeSotrudnikForm(forms.ModelForm):
-    sotrudnik_id = forms.ModelChoiceField(queryset=models.Sotrudnik.objects.values_list('id', flat=True), empty_label=None, label='Выберите id сотрудника')
-    sotrudnik_fam = forms.ModelChoiceField(queryset=models.Sotrudnik.objects.values_list('fam', flat=True), empty_label=None, label='Выберите фамилию сотрудника')
-    sotrudnik_name = forms.ModelChoiceField(queryset=models.Sotrudnik.objects.values_list('name', flat=True), empty_label=None, label='Выберите Имя сотрудника')
-    dolznost = forms.ModelChoiceField(queryset=models.Dolznost.objects.values_list('dolznost_name', flat=True), empty_label=None, label='Выберите должность')
+    id_dolznost = forms.ModelChoiceField(
+    queryset=models.Dolznost.objects.all(), empty_label=None,
+    label='Выберите должность')
     class Meta():
         model = models.Sotrudnik
         fields = '__all__'
