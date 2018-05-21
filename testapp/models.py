@@ -45,7 +45,7 @@ class Efir(models.Model):
     stop_efir = models.DateTimeField(null = False, unique = True)
     id_peredacha = models.ForeignKey('Peredacha', on_delete = models.CASCADE, null = False)
     def __str__(self):
-        return '%s' % self.id
+        return 'Начало ефира: %s Конец ефира: %s - %s' % (self.start_efir.replace(tzinfo = None), self.stop_efir.replace(tzinfo = None), self.id_peredacha)
 
 class Sotrudnik_in_efir(models.Model):
     """Сотрудник назначеный на определенный ефир"""

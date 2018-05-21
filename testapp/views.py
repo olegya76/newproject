@@ -174,3 +174,98 @@ def change_sotrudnik(request, pk):
         "sotrudnik":sotrudnik_list
         }
     return render(request, 'testapp/controlBd/control_sotrudnik_change.html', context)
+
+
+"""Управление ефир"""
+def efir_control_view(request):
+    efir_list = Efir.objects.order_by('id')
+    form = forms.EfirForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('control_efir'))
+    context = {
+        'EfirForm' : form,
+        "efir":efir_list
+        }
+    return render(request, 'testapp/controlBd/control_efir.html', context)
+
+def delete_efir(request, pk):
+    print('delete')
+    item = get_object_or_404(Efir,  pk=pk)
+    item.delete()
+    return HttpResponseRedirect(reverse('control_efir'))
+
+def change_efir(request, pk):
+    print('change')
+    list = Efir.objects.order_by('id')
+    item = get_object_or_404(Efir, pk = pk)
+    form = forms.EfirForm(request.POST or None, instance = item)
+    if 'change' in request.POST:
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('control_efir'))
+        context = {
+            'EfirForm' : form,
+            "efir": list
+            }
+        print('error valid')
+        return render(request, 'testapp/controlBd/control_efir.html', context)
+    elif 'add' in request.POST:
+        form = forms.EfirForm(request.POST or None)
+        context = {
+            'EfirForm' : form,
+            "efir": list
+            }
+        return HttpResponseRedirect(reverse('control_efir'))
+    context = {
+        'EfirForm' : form,
+        "sotrudnik": list
+        }
+    return render(request, 'testapp/controlBd/control_efir_change.html', context)
+
+"""Управление реклама во время ефира"""
+def reklama_in_efir_control_view(request):
+    list = Reklama_in_efir.objects.order_by('id')
+    form = forms.Reklama_in_efirForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('control_reklama_in_efir'))
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/controlBd/control_reklama_in_efir.html', context)
+
+def delete_reklama_in_efir(request, pk):
+    print('delete')
+    item = get_object_or_404(Reklama_in_efir,  pk=pk)
+    item.delete()
+    return HttpResponseRedirect(reverse('control_reklama_in_efir'))
+
+def change_reklama_in_efir(request, pk):
+    print('change')
+    list = Reklama_in_efir.objects.order_by('id')
+    item = get_object_or_404(Efir, pk = pk)
+    form = forms.Reklama_in_efirForm(request.POST or None, instance = item)
+    if 'change' in request.POST:
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('control_reklama_in_efir'))
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        print('error valid')
+        return render(request, 'testapp/controlBd/control_reklama_in_efir.html', context)
+    elif 'add' in request.POST:
+        form = forms.Reklama_in_efirForm(request.POST or None)
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        return HttpResponseRedirect(reverse('control_reklama_in_efir'))
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/controlBd/control_reklama_in_efir_change.html', context)

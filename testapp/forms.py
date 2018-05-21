@@ -127,6 +127,37 @@ class SotrudnikForm(forms.ModelForm):
             'passport_number': 'Паспорт',
             'data_priom': 'Дата приема на работу',
         }
+
+"""Управление Ефир"""
+class EfirForm(forms.ModelForm):
+    id_peredacha = forms.ModelChoiceField(
+    queryset = models.Peredacha.objects.all(), empty_label = None,
+    label = 'Выберете передачу'
+    )
+    class Meta():
+        model = models.Efir
+        fields = '__all__'
+        labels = {
+        'start_efir': 'Начало ефира',
+        'stop_efir': 'Окончание ефира',
+        }
+
+"""Управление Реклама в ефире"""
+class Reklama_in_efirForm(forms.ModelForm):
+    id_reklama = forms.ModelChoiceField(
+    queryset = models.Reklama.objects.all(), empty_label = None,
+    label = 'Выберете рекламу'
+    )
+    id_efir = forms.ModelChoiceField(
+    queryset = models.Efir.objects.all(), empty_label = None,
+    label = 'Выберете ефир'
+    )
+    class Meta():
+        model = models.Reklama_in_efir
+        fields = '__all__'
+
+
+
 """Изменение сотрудника"""
 class ChangeSotrudnikForm(forms.ModelForm):
     id_dolznost = forms.ModelChoiceField(
