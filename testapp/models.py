@@ -20,7 +20,7 @@ class Sotrudnik(models.Model):
     id_dolznost = models.ForeignKey('Dolznost', on_delete = models.CASCADE, null = False)
     data_priom = models.DateField(null = False)
     def __str__(self):
-        return '%s' % self.name
+        return '%s %s - %s' % (self.name, self.fam, self. id_dolznost)
 
 class Peredacha(models.Model):
     """Информация о передаче"""

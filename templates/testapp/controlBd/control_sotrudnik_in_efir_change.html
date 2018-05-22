@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% extends "testapp/base.html"%}
   {% block body_block %}
-    <h1>Управление рекламой во время ефира</h1>
+    <h1>Управление сотрудниками во время ефиров</h1>
     {% if Form.errors %}
     {% for field in Form %}
         {% for error in field.errors %}
@@ -17,7 +17,7 @@
     {% endfor %}
 {% endif %}
     <div class="container">
-      <h1>Изменить рекламу во время ефира</h1>
+      <h1>Изменить назначение сотрудника во время ефира</h1>
       <form method="POST">
         {{ Form.as_p }}
         {% csrf_token %}

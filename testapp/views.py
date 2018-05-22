@@ -75,57 +75,151 @@ def reklama_control_view(request):
 
     return render(request, 'testapp/controlBd/control_reklama.html', {'AddReklamaForm': forms.AddReklamaForm(prefix = 'Adding'), 'ChangeReklamaForm': forms.ChangeReklamaForm(prefix='Changing'), 'DeleteReklamaForm': forms.DeleteReklamaForm(prefix='Deleting'), "reklama":reklama_list})
 
-
-#Управление передачи
+"""Управление передачи"""
 def peredacha_control_view(request):
-    peredacha_list = Peredacha.objects.order_by('peredacha_name')
+    list = Peredacha.objects.order_by('id')
+    form = forms.PeredachaForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('control_peredacha'))
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/controlBd/control_peredacha.html', context)
 
-    if request.method == 'POST':
-        type = None
-        if 'add' in request.POST:
-            AddPeredacha = forms.AddPeredachaForm(request.POST, prefix='Adding')
-            if AddPeredacha.is_valid():
-                AddPeredacha.save(commit = True)
-        elif 'change' in request.POST:
-            ChangePeredacha = forms.ChangePeredachaForm(request.POST, prefix='Changing')
-            #что-то с ВАЛИДАЦИЕЙ
-            peredacha_name = request.POST.get('Changing-peredacha')
-            new_peredacha_name = request.POST.get('Changing-peredacha_name')
-            new_rek_stoim_for_min = request.POST.get('Changing-rek_stoim_for_min')
-            new_rating = request.POST.get('Changing-rating')
-            new_studiya = request.POST.get('Changing-studiya')
-            Peredacha.objects.filter(peredacha_name = peredacha_name).update(peredacha_name = new_peredacha_name)
-        elif 'delete' in request.POST:
-            DeletePeredacha = forms.DeletePeredachaForm(request.POST, prefix = 'Deleting')
-            #валидация
-            peredacha_name = request.POST.get('Deleting-reklama')
-            Reklama.objects.filter(peredacha_name = peredacha_name).delete()
+def delete_peredacha(request, pk):
+    print('delete')
+    item = get_object_or_404(Peredacha,  pk=pk)
+    item.delete()
+    return HttpResponseRedirect(reverse('control_peredacha'))
 
-    return render(request, 'testapp/controlBd/control_peredacha.html', {'AddPeredachaForm': forms.AddPeredachaForm(prefix = 'Adding'), 'ChangePeredachaForm': forms.ChangePeredachaForm(prefix='Changing'), 'DeletePeredachaForm': forms.DeletePeredachaForm(prefix='Deleting'), "peredacha":peredacha_list})
+def change_peredacha(request, pk):
+    print('change')
+    list = Peredacha.objects.order_by('id')
+    item = get_object_or_404(Peredacha, pk = pk)
+    form = forms.PeredachaForm(request.POST or None, instance = item)
+    if 'change' in request.POST:
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('control_peredacha'))
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        print('error valid')
+        return render(request, 'testapp/controlBd/control_peredacha_change.html', context)
+    elif 'add' in request.POST:
+        form = forms.PeredachaForm(request.POST or None)
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        return HttpResponseRedirect(reverse('control_peredacha'))
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/controlBd/control_peredacha_change.html', context)
 
+
+# #Управление передачи
+# def peredacha_control_view(request):
+#     peredacha_list = Peredacha.objects.order_by('peredacha_name')
+#
+#     if request.method == 'POST':
+#         type = None
+#         if 'add' in request.POST:
+#             AddPeredacha = forms.AddPeredachaForm(request.POST, prefix='Adding')
+#             if AddPeredacha.is_valid():
+#                 AddPeredacha.save(commit = True)
+#         elif 'change' in request.POST:
+#             ChangePeredacha = forms.ChangePeredachaForm(request.POST, prefix='Changing')
+#             #что-то с ВАЛИДАЦИЕЙ
+#             peredacha_name = request.POST.get('Changing-peredacha')
+#             new_peredacha_name = request.POST.get('Changing-peredacha_name')
+#             new_rek_stoim_for_min = request.POST.get('Changing-rek_stoim_for_min')
+#             new_rating = request.POST.get('Changing-rating')
+#             new_studiya = request.POST.get('Changing-studiya')
+#             Peredacha.objects.filter(peredacha_name = peredacha_name).update(peredacha_name = new_peredacha_name)
+#         elif 'delete' in request.POST:
+#             DeletePeredacha = forms.DeletePeredachaForm(request.POST, prefix = 'Deleting')
+#             #валидация
+#             peredacha_name = request.POST.get('Deleting-reklama')
+#             Reklama.objects.filter(peredacha_name = peredacha_name).delete()
+#
+#     return render(request, 'testapp/controlBd/control_peredacha.html', {'AddPeredachaForm': forms.AddPeredachaForm(prefix = 'Adding'), 'ChangePeredachaForm': forms.ChangePeredachaForm(prefix='Changing'), 'DeletePeredachaForm': forms.DeletePeredachaForm(prefix='Deleting'), "peredacha":peredacha_list})
 
 """Управление должности"""
 def dolznost_control_view(request):
-    dolznost_list = Dolznost.objects.order_by('dolznost_name')
-    if request.method == 'POST':
-        if 'add' in request.POST:
-            AddDolznost = forms.AddDolznostForm(request.POST, prefix='Adding')
-            if AddDolznost.is_valid():
-                AddDolznost.save(commit = True)
-        elif 'change' in request.POST:
-            ChangeDolznost = forms.ChangeDolznostForm(request.POST, prefix='Changing')
-            #что-то с ВАЛИДАЦИЕЙ
-            dolznost_name = request.POST.get('Changing-dolznost')
-            new_dolznost_name = request.POST.get('Changing-dolznost_name')
-            new_oklad = request.POST.get('Changing-oklad')
-            Dolznost.objects.filter(dolznost_name = dolznost_name).update(dolznost_name = new_dolznost_name)
-        elif 'delete' in request.POST:
-            DeleteDolznost = forms.DeleteDolznostForm(request.POST, prefix = 'Deleting')
-            #валидация
-            dolznost_name = request.POST.get('Deleting-dolznost')
-            Dolznost.objects.filter(dolznost_name = dolz_name).delete()
+    list = Dolznost.objects.order_by('id')
+    form = forms.DolznostForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('control_dolznost'))
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/controlBd/control_dolznost.html', context)
 
-    return render(request, 'testapp/controlBd/control_dolznost.html', {'AddDolznostForm': forms.AddDolznostForm(prefix = 'Adding'), 'ChangeDolznostForm': forms.ChangeDolznostForm(prefix='Changing'), 'DeleteDolznostForm': forms.DeleteDolznostForm(prefix='Deleting'), "dolznost":dolznost_list})
+def delete_dolznost(request, pk):
+    print('delete')
+    item = get_object_or_404(Dolznost,  pk=pk)
+    item.delete()
+    return HttpResponseRedirect(reverse('control_dolznost'))
+
+def change_dolznost(request, pk):
+    print('change')
+    list = Dolznost.objects.order_by('id')
+    item = get_object_or_404(Dolznost, pk = pk)
+    form = forms.DolznostForm(request.POST or None, instance = item)
+    if 'change' in request.POST:
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('control_dolznost'))
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        print('error valid')
+        return render(request, 'testapp/controlBd/control_dolznost_change.html', context)
+    elif 'add' in request.POST:
+        form = forms.DolznostForm(request.POST or None)
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        return HttpResponseRedirect(reverse('control_dolznost'))
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/controlBd/control_dolznost_change.html', context)
+
+
+# """Управление должности"""
+# def dolznost_control_view(request):
+#     dolznost_list = Dolznost.objects.order_by('dolznost_name')
+#     if request.method == 'POST':
+#         if 'add' in request.POST:
+#             AddDolznost = forms.AddDolznostForm(request.POST, prefix='Adding')
+#             if AddDolznost.is_valid():
+#                 AddDolznost.save(commit = True)
+#         elif 'change' in request.POST:
+#             ChangeDolznost = forms.ChangeDolznostForm(request.POST, prefix='Changing')
+#             #что-то с ВАЛИДАЦИЕЙ
+#             dolznost_name = request.POST.get('Changing-dolznost')
+#             new_dolznost_name = request.POST.get('Changing-dolznost_name')
+#             new_oklad = request.POST.get('Changing-oklad')
+#             Dolznost.objects.filter(dolznost_name = dolznost_name).update(dolznost_name = new_dolznost_name)
+#         elif 'delete' in request.POST:
+#             DeleteDolznost = forms.DeleteDolznostForm(request.POST, prefix = 'Deleting')
+#             #валидация
+#             dolznost_name = request.POST.get('Deleting-dolznost')
+#             Dolznost.objects.filter(dolznost_name = dolz_name).delete()
+#
+#     return render(request, 'testapp/controlBd/control_dolznost.html', {'AddDolznostForm': forms.AddDolznostForm(prefix = 'Adding'), 'ChangeDolznostForm': forms.ChangeDolznostForm(prefix='Changing'), 'DeleteDolznostForm': forms.DeleteDolznostForm(prefix='Deleting'), "dolznost":dolznost_list})
 
 
 """Управление сотрудники"""
@@ -264,6 +358,53 @@ def change_reklama_in_efir(request, pk):
             "data": list
             }
         return HttpResponseRedirect(reverse('control_reklama_in_efir'))
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/controlBd/control_reklama_in_efir_change.html', context)
+
+"""Управление сотрудник во время ефира"""
+def sotrudnik_in_efir_control_view(request):
+    list = Sotrudnik_in_efir.objects.order_by('id')
+    form = forms.Sotrudnik_in_efirForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('control_sotrudnik_in_efir'))
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/controlBd/control_sotrudnik_in_efir.html', context)
+
+def delete_sotrudnik_in_efir(request, pk):
+    print('delete')
+    item = get_object_or_404(Sotrudnik_in_efir,  pk=pk)
+    item.delete()
+    return HttpResponseRedirect(reverse('control_sotrudnik_in_efir'))
+
+def change_sotrudnik_in_efir(request, pk):
+    print('change')
+    list = Sotrudnik_in_efir.objects.order_by('id')
+    item = get_object_or_404(Sotrudnik_in_efir, pk = pk)
+    form = forms.Sotrudnik_in_efirForm(request.POST or None, instance = item)
+    if 'change' in request.POST:
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('control_sotrudnik_in_efir'))
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        print('error valid')
+        return render(request, 'testapp/controlBd/sotrudnik_reklama_in_efir_change.html', context)
+    elif 'add' in request.POST:
+        form = forms.Sotrudnik_in_efirForm(request.POST or None)
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        return HttpResponseRedirect(reverse('control_sotrudnik_in_efir'))
     context = {
         'Form' : form,
         "data": list
