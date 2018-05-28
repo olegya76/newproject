@@ -18,7 +18,7 @@
 {% endif %}
     <div class="container">
       <h1>Назначить сотрудника на ефир</h1>
-      <form method="POST">
+      <form method="POST" >
         {{ Form.as_p }}
         {% csrf_token %}
         <input type="submit" class='btn btn-primary' name="add" value="Добавить">

@@ -25,6 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('control/', views.control_view, name = 'control_main'),
     path('control/reklama/', views.reklama_control_view, name = 'control_reklama'),
+    path('control/reklama/<int:pk>/delete', views.delete_reklama, name='delete_reklama'),
+    path('control/reklama/<int:pk>/change', views.change_reklama, name='change_reklama'),
     path('control/dolznost/', views.dolznost_control_view, name = 'control_dolznost'),
     path('control/sotrudnik/', views.sotrudnik_control_view, name = 'control_sotrudnik'),
     path('control/sotrudnik/<int:pk>/delete', views.delete_sotrudnik, name='delete_sotrudnik'),

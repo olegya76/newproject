@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% extends "testapp/base.html"%}
+  {% block body_block %}
+    <h1>Управление рекламами</h1>
+    {% if Form.errors %}
+    {% for field in Form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in Form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+    <div class="container">
+      <h1>Изменить рекламу</h1>
+      <form method="POST">
+        {{ Form.as_p }}
+        {% csrf_token %}
+        <input type="submit" class='btn btn-primary' name="add" value="Назад к добавлению">
+        <input type="submit" class='btn btn-primary' name="change" value="Изменить">
+      </form>
+    </div>
+    {% endblock %}

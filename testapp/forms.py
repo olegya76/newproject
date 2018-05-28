@@ -32,8 +32,7 @@ class NewReklamaForm(forms.ModelForm):
             'mail': 'Email компании labels',
         }
 """Управление: Реклама"""
-#Добавление рекламы
-class AddReklamaForm(forms.ModelForm):
+class ReklamaForm(forms.ModelForm):
     class Meta():
         model = models.Reklama
         fields = '__all__'
@@ -42,21 +41,6 @@ class AddReklamaForm(forms.ModelForm):
             'rekvesit': 'Реквезиты',
             'mail': 'Email компании',
         }
-#Изменение рекламы
-class ChangeReklamaForm(forms.ModelForm):
-    reklama = forms.ModelChoiceField(queryset=models.Reklama.objects.values_list('reklama_name', flat=True), empty_label=None, label='Выберите рекомодателя')
-    class Meta():
-        model = models.Reklama
-        fields = '__all__'
-        labels = {
-            'reklama_name': 'Название компании',
-            'rekvesit': 'Реквезиты',
-            'mail': 'Email компании',
-        }
-#Удаление рекламы
-class DeleteReklamaForm(forms.Form):
-    reklama = forms.ModelChoiceField(queryset=models.Reklama.objects.values_list('reklama_name', flat=True), empty_label=None, label='Выберите рекомодателя')
-
 
 """Управление: Передача"""
 class PeredachaForm(forms.ModelForm):

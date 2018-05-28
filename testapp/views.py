@@ -48,32 +48,53 @@ def new_reklama_view(request):
 def control_view(request):
     return render(request, 'testapp/controlBd/main.html')
 
-#Управление Реклама
-def reklama_control_view(request):
-    reklama_list = Reklama.objects.order_by('mail')
-    reklama_dict = {"reklama":reklama_list}
-    if request.method == 'POST':
-        type = None
-        if 'add' in request.POST:
-            AddReklama = forms.AddReklamaForm(request.POST, prefix='Adding')
-            if AddReklama.is_valid():
-                AddReklama.save(commit = True)
-        elif 'change' in request.POST:
-            ChangeReklama = forms.ChangeReklamaForm(request.POST, prefix='Changing')
-            #что-то с ВАЛИДАЦИЕЙ
-            reklama_name = request.POST.get('Changing-reklama')
-            new_reklama_name = request.POST.get('Changing-reklama_name')
-            new_rekvesit = request.POST.get('Changing-rekvesit')
-            new_mail = request.POST.get('Changing-mail')
-            print('reklama_name', reklama_name, 'new_reklama_name', new_reklama_name)
-            Reklama.objects.filter(reklama_name = reklama_name).update(reklama_name = new_reklama_name)
-        elif 'delete' in request.POST:
-            DeleteReklama = forms.DeleteReklamaForm(request.POST, prefix = 'Deleting')
-            #валидация
-            reklama_name = request.POST.get('Deleting-reklama')
-            Reklama.objects.filter(reklama_name = reklama_name).delete()
+"""Управление Реклама"""
 
-    return render(request, 'testapp/controlBd/control_reklama.html', {'AddReklamaForm': forms.AddReklamaForm(prefix = 'Adding'), 'ChangeReklamaForm': forms.ChangeReklamaForm(prefix='Changing'), 'DeleteReklamaForm': forms.DeleteReklamaForm(prefix='Deleting'), "reklama":reklama_list})
+def reklama_control_view(request):
+    list = Reklama.objects.order_by('id')
+    form = forms.ReklamaForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('control_reklama'))
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/controlBd/control_reklama.html', context)
+
+def delete_reklama(request, pk):
+    print('delete')
+    item = get_object_or_404(Reklama,  pk=pk)
+    item.delete()
+    return HttpResponseRedirect(reverse('control_reklama'))
+
+def change_reklama(request, pk):
+    print('change')
+    list = Reklama.objects.order_by('id')
+    item = get_object_or_404(Reklama, pk = pk)
+    form = forms.ReklamaForm(request.POST or None, instance = item)
+    if 'change' in request.POST:
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('control_reklama'))
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        print('error valid')
+        return render(request, 'testapp/controlBd/control_reklama_change.html', context)
+    elif 'add' in request.POST:
+        form = forms.ReklamaForm(request.POST or None)
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        return HttpResponseRedirect(reverse('control_reklama'))
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/controlBd/control_reklama_change.html', context)
 
 """Управление передачи"""
 def peredacha_control_view(request):
