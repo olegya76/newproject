@@ -1,8 +1,19 @@
 from django import forms
 from django.core import validators
 from . import models
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 
 # Very Basic Example of a Django Form
+
+class SignUpForm(UserCreationForm):
+    class Meta():
+        model = User
+        fields = ('username', 'password1', 'password2')
+
+class LogInForm(forms.Form):
+    username = forms.CharField(max_length=64)
+    password = forms.CharField(widget=forms.PasswordInput)
 
 class FormReklama(forms.Form):
     name = forms.CharField()

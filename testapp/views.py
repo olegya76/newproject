@@ -1,15 +1,54 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import *
 from . import forms
 from django.shortcuts import render, get_object_or_404
-
+from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
 
 def index(request):
     reklama_list = Reklama.objects.order_by('mail')
     reklama_dict = {"reklama":reklama_list}
     return render(request,'testapp/index.html')
+
+def loginpage(request):
+    logout(request)
+    username = password = ''
+    if request.method == "POST":
+        form = forms.LogInForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            try:
+                login(request, user)
+            except Exception:
+                messages.error(request, 'Ошибка входа!')
+                return redirect('/login/')
+            return redirect('/control/')
+        else:
+            messages.error(request, 'Ошибка входа!')
+    else:
+        form = forms.LogInForm()
+    return render(request, 'testapp/controlBd/loginpage.html', {'form': form})
+
+def signup(request):
+    logout(request) # если пользователь пропишет в адресной строке url страницы регистрации, то он выйдет из уч. записи
+    if request.method == 'POST':
+        form = forms.SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.save()
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+            return redirect('/control/')
+        else:
+            messages.error(request, 'Ошибка!')
+    else:
+        form = forms.SignUpForm()
+    return render(request, 'testapp/controlBd/signup.html', {'form': form})
 
 def reklama(request):
     reklama_list = Reklama.objects.order_by('mail')

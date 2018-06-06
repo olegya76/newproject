@@ -26,7 +26,7 @@ SECRET_KEY = 'erk)s=c0i7p+7t-3m76-rbn!5c#dq_4^e!3u8slz$2@*zgk7#k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR],
+        'DIRS': [TEMPLATE_DIR, ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,11 +81,10 @@ DATABASES = {
         'NAME': 'kurs',
         'USER': 'myprojectuser',
         'PASSWORD': 'password',
-        'HOST': 'localhost',
+        'HOST': '',
         'PORT': 5432,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -105,6 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGIN_REDIRECT_URL = '/control/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/

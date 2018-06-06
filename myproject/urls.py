@@ -23,6 +23,10 @@ urlpatterns = [
     path(r'',views.index, name = 'index'),
     url(r'^testapp/',include('testapp.urls')),
     path('admin/', admin.site.urls),
+    # auth system
+    path('login/', views.loginpage, name='loginpage'),
+    path('signup/', views.signup, name='signuppage'),
+    #
     path('control/', views.control_view, name = 'control_main'),
     path('control/reklama/', views.reklama_control_view, name = 'control_reklama'),
     path('control/reklama/<int:pk>/delete', views.delete_reklama, name='delete_reklama'),

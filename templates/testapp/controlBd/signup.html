@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% extends 'testapp/base.html' %}
+{% block body_block %}
+<style media="screen">
+  #signup {
+    text-align: center;
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 10%;
+    padding: 50px;
+    border: 2px solid #69a4c6;
+    border-radius: 2%;
+  }
+</style>
+<div class="container" id='signup'>
+  <form method="post">
+    {% csrf_token %}
+      {% if messages %}
+        {% for msg in messages %}
+        <p style="color: red;">{{ msg }}</p>
+        {% endfor %}
+      {% endif %}
+    <p>Логин (номер паспорта): </p>
+    <p>{{ form.username }}</p>
+    <p>Пароль: </p>
+    <p>{{ form.password1 }}</p>
+    <p>Подтвердите пароль: </p>
+    <p>{{ form.password2}}</p>
+    <input type="submit" name="signup">
+  </form>
+</div>
+{% endblock %}
