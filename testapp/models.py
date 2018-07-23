@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class Dolznost(models.Model):
     """Должность сотрудника"""
     dolznost_name = models.CharField(max_length=255, null = False, unique = True)
@@ -60,15 +58,3 @@ class Reklama_in_efir(models.Model):
     id_efir = models.ForeignKey('Efir', on_delete = models.CASCADE, null = False)
     def __str__(self):
         return '%s' % self.id
-
-# class Sotrudnik_in_efir(models.Model):
-#     """Сотрудник назначеный на определенный ефир"""
-#     # id = models.AutoField(primary_key=True)
-#     id_sotrudnik = models.ForeignKey('Sotrudnik', on_delete = models.CASCADE, null = False)
-#     id_efir = models.ForeignKey('Efir', on_delete = models.CASCADE, null = False)
-
-# class Reklama_in_efir(models.Model):
-#     """Реклама которая должна быть во время передачи"""
-#     # id = models.AutoField(primary_key=True)
-#     id_reklama = models.ForeignKey('Reklama', on_delete = models.CASCADE, null = False)
-#     id_efir = models.ForeignKey('Efir', on_delete = models.CASCADE, null = False)

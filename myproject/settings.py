@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'kurs',
         'USER': 'myprojectuser',
         'PASSWORD': 'password',
-        'HOST': '',
+        'HOST': 'localhost',
         'PORT': 5432,
     }
 }

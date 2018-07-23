@@ -3,13 +3,25 @@
   {% block body_block %}
 
     <div class="container">
-      <li><a href="{% url 'control_reklama' %}">Управление рекламами</a></li>
-      <li><a href="{% url 'control_peredacha' %}">Управление передачами</a></li>
+      {% if user.username == 'manager_sotr'%}
       <li><a href="{% url 'control_dolznost' %}">Управление должностями</a></li>
       <li><a href="{% url 'control_sotrudnik' %}">Управление сотрудниками</a></li>
+      <li><a href="{% url 'search_sotrudnik' %}">Поиск сотрудника</a></li>
+      {% endif %}
+
+
+      {% if user.username == 'manager_efir'%}
+      <li><a href="{% url 'control_reklama' %}">Управление рекламами</a></li>
+      <li><a href="{% url 'control_peredacha' %}">Управление передачами</a></li>
       <li><a href="{% url 'control_efir' %}">Управление ефирами</a></li>
       <li><a href="{% url 'control_reklama_in_efir' %}">Управление рекламой во время ефира</a></li>
       <li><a href="{% url 'control_sotrudnik_in_efir' %}">Управление сотрудниками во время ефира</a></li>
+      <li><a href="{% url 'search_efir_in_sotrudnik' %}">Поиск ефиров, в которых участвует сотрудник</a></li>
+      <li><a href="{% url 'search_sotrudnik_in_efir' %}">Поиск сотрудников участующих во время ефира</a></li>
+      {% endif %}
+
+
+
     </div>
 
     {% endblock %}

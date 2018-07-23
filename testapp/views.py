@@ -6,6 +6,8 @@ from . import forms
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     reklama_list = Reklama.objects.order_by('mail')
@@ -50,47 +52,16 @@ def signup(request):
         form = forms.SignUpForm()
     return render(request, 'testapp/controlBd/signup.html', {'form': form})
 
-def reklama(request):
-    reklama_list = Reklama.objects.order_by('mail')
-    reklama_dict = {"reklama":reklama_list}
-    return render(request, 'testapp/reklama.html', context = reklama_dict)
-
-def form_reklama_view(request):
-    form = forms.FormReklama()
-
-    # Check to see if we get a POST back.
-    if request.method == 'POST':
-        # In which case we pass in that request.
-        form = forms.FormReklama(request.POST)
-
-        # Check to see form is valid
-        if form.is_valid():
-            # Do something.
-            print("Form Validation Success. Prints in console.")
-            print("Name"+form.cleaned_data['name'])
-            print("Email"+form.cleaned_data['rekvesit'])
-            print('Text'+form.cleaned_data['mail'])
-    return render(request,'testapp/form_reklama.html',{'form':form})
-
-def new_reklama_view(request):
-    form = forms.NewReklamaForm
-    if request.method == 'POST':
-        form = forms.NewReklamaForm(request.POST)
-        if form.is_valid():
-            form.save(commit = True)
-            return reklama(request)
-        else:
-            print('ERROR FORM INVALID')
-    else:
-        return render(request, 'testapp/new_reklama.html', {'form':form})
-
+"""Страница управления данными"""
+@login_required
 def control_view(request):
+    #print(user.username)
     return render(request, 'testapp/controlBd/main.html')
 
 """Управление Реклама"""
-
 def reklama_control_view(request):
     list = Reklama.objects.order_by('id')
+    print(list)
     form = forms.ReklamaForm(request.POST or None)
     if form.is_valid():
         form.save()
@@ -182,34 +153,6 @@ def change_peredacha(request, pk):
         }
     return render(request, 'testapp/controlBd/control_peredacha_change.html', context)
 
-
-# #Управление передачи
-# def peredacha_control_view(request):
-#     peredacha_list = Peredacha.objects.order_by('peredacha_name')
-#
-#     if request.method == 'POST':
-#         type = None
-#         if 'add' in request.POST:
-#             AddPeredacha = forms.AddPeredachaForm(request.POST, prefix='Adding')
-#             if AddPeredacha.is_valid():
-#                 AddPeredacha.save(commit = True)
-#         elif 'change' in request.POST:
-#             ChangePeredacha = forms.ChangePeredachaForm(request.POST, prefix='Changing')
-#             #что-то с ВАЛИДАЦИЕЙ
-#             peredacha_name = request.POST.get('Changing-peredacha')
-#             new_peredacha_name = request.POST.get('Changing-peredacha_name')
-#             new_rek_stoim_for_min = request.POST.get('Changing-rek_stoim_for_min')
-#             new_rating = request.POST.get('Changing-rating')
-#             new_studiya = request.POST.get('Changing-studiya')
-#             Peredacha.objects.filter(peredacha_name = peredacha_name).update(peredacha_name = new_peredacha_name)
-#         elif 'delete' in request.POST:
-#             DeletePeredacha = forms.DeletePeredachaForm(request.POST, prefix = 'Deleting')
-#             #валидация
-#             peredacha_name = request.POST.get('Deleting-reklama')
-#             Reklama.objects.filter(peredacha_name = peredacha_name).delete()
-#
-#     return render(request, 'testapp/controlBd/control_peredacha.html', {'AddPeredachaForm': forms.AddPeredachaForm(prefix = 'Adding'), 'ChangePeredachaForm': forms.ChangePeredachaForm(prefix='Changing'), 'DeletePeredachaForm': forms.DeletePeredachaForm(prefix='Deleting'), "peredacha":peredacha_list})
-
 """Управление должности"""
 def dolznost_control_view(request):
     list = Dolznost.objects.order_by('id')
@@ -256,31 +199,6 @@ def change_dolznost(request, pk):
         "data": list
         }
     return render(request, 'testapp/controlBd/control_dolznost_change.html', context)
-
-
-# """Управление должности"""
-# def dolznost_control_view(request):
-#     dolznost_list = Dolznost.objects.order_by('dolznost_name')
-#     if request.method == 'POST':
-#         if 'add' in request.POST:
-#             AddDolznost = forms.AddDolznostForm(request.POST, prefix='Adding')
-#             if AddDolznost.is_valid():
-#                 AddDolznost.save(commit = True)
-#         elif 'change' in request.POST:
-#             ChangeDolznost = forms.ChangeDolznostForm(request.POST, prefix='Changing')
-#             #что-то с ВАЛИДАЦИЕЙ
-#             dolznost_name = request.POST.get('Changing-dolznost')
-#             new_dolznost_name = request.POST.get('Changing-dolznost_name')
-#             new_oklad = request.POST.get('Changing-oklad')
-#             Dolznost.objects.filter(dolznost_name = dolznost_name).update(dolznost_name = new_dolznost_name)
-#         elif 'delete' in request.POST:
-#             DeleteDolznost = forms.DeleteDolznostForm(request.POST, prefix = 'Deleting')
-#             #валидация
-#             dolznost_name = request.POST.get('Deleting-dolznost')
-#             Dolznost.objects.filter(dolznost_name = dolz_name).delete()
-#
-#     return render(request, 'testapp/controlBd/control_dolznost.html', {'AddDolznostForm': forms.AddDolznostForm(prefix = 'Adding'), 'ChangeDolznostForm': forms.ChangeDolznostForm(prefix='Changing'), 'DeleteDolznostForm': forms.DeleteDolznostForm(prefix='Deleting'), "dolznost":dolznost_list})
-
 
 """Управление сотрудники"""
 def sotrudnik_control_view(request):
@@ -470,3 +388,91 @@ def change_sotrudnik_in_efir(request, pk):
         "data": list
         }
     return render(request, 'testapp/controlBd/control_reklama_in_efir_change.html', context)
+
+
+"""Поиск сотрудника"""
+def search_sotrudnik(request):
+    if request.method == 'POST':
+        fam = request.POST.get('fam')
+        name = request.POST.get('name')
+        otchestvo = request.POST.get('otchestvo')
+        kard_number = request.POST.get('kard_number')
+        if request.POST.get('otdel'):
+            otdel = request.POST.get('otdel')
+        else:
+            otdel = -1
+        passport_number = request.POST.get('passport_number')
+        if request.POST.get('id_dolznost'):
+            id_dolznost = request.POST.get('id_dolznost')
+        else:
+            id_dolznost = -1
+        if request.POST.get('data_priom'):
+            data_priom = request.POST.get('data_priom')
+        else:
+            data_priom = "0001-01-01"
+        print(fam)
+        form = forms.SearchSotrudnikForm(request.POST or None)
+        list = Sotrudnik.objects.filter(
+        Q(fam = fam)
+        | Q(name = name)
+        | Q(otchestvo = otchestvo)
+        | Q(kard_number = kard_number)
+        | Q(otdel = otdel)
+        | Q(passport_number = passport_number)
+        | Q(id_dolznost = id_dolznost)
+        | Q(data_priom = data_priom)
+        )
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        return render(request, 'testapp/search_sotrudnik.html', context)
+    form = forms.SearchSotrudnikForm(request.POST or None)
+    list = Sotrudnik.objects.order_by('id')
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/search_sotrudnik.html', context)
+
+
+"""Поиск сотрудника во время ефиров"""
+def search_efir_in_sotrudnik(request):
+    if request.method == 'POST':
+        sotrudnik = request.POST.get('id_sotrudnik')
+        print(sotrudnik)
+        form = forms.Sotrudnik_in_efirForm(request.POST or None)
+        list = Sotrudnik_in_efir.objects.filter( Q(id_sotrudnik = sotrudnik) )
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        return render(request, 'testapp/search_efir_in_sotrudnik.html', context)
+    form = forms.Sotrudnik_in_efirForm(request.POST or None)
+    list = Sotrudnik_in_efir.objects.order_by('id')
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/search_efir_in_sotrudnik.html', context)
+
+
+"""Поиск сотрудников назначеных на ефир"""
+def search_sotrudnik_in_efir(request):
+    if request.method == 'POST':
+        efir = request.POST.get('id_efir')
+        print(efir)
+        form = forms.Sotrudnik_in_efirForm(request.POST or None)
+        list = Sotrudnik_in_efir.objects.filter( Q(id_efir = efir) )
+        context = {
+            'Form' : form,
+            "data": list
+            }
+        return render(request, 'testapp/search_sotrudnik_in_efir.html', context)
+    form = forms.Sotrudnik_in_efirForm(request.POST or None)
+    list = Sotrudnik_in_efir.objects.order_by('id')
+    context = {
+        'Form' : form,
+        "data": list
+        }
+    return render(request, 'testapp/search_sotrudnik_in_efir.html', context)

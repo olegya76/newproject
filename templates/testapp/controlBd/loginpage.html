@@ -20,11 +20,11 @@
         <p style="color: red;">{{ msg }}</p>
         {% endfor %}
       {% endif %}
-    <p>Логин (номер паспорта): </p>
+    <p>Логин: </p>
     <p>{{ form.username }}</p>
     <p>Пароль: </p>
     <p>{{ form.password }}</p>
-    <input type="submit" name="login">
+    <input type="submit" name="login" value="Войти">
   </form>
 </div>
 {% endblock %}

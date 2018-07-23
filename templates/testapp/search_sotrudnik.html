@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+{% extends "testapp/base.html"%}
+  {% block body_block %}
+    <h1>Поиск сотрудника</h1>
+
+    <div class="container">
+      <form method="POST" >
+        <!-- <p>Фамилия:</p>
+        <p>{{ Form.fam }}</p>
+        <p>Имя:</p>
+        <p>{{ Form.name }}</p>
+         -->
+         {{ Form.as_p }}
+         {% csrf_token %}
+        <input type="submit" class='btn btn-primary' name="add" value="Поиск">
+      </form>
+    </div>
+    <div >
+      {% if data %}
+      <table class="table table-dark">
+        <thead>
+          <th scope="col">ID</th>
+          <th scope="col">Фамилия</th>
+          <th scope="col">Имя</th>
+          <th scope="col">Отчество</th>
+          <th scope="col">Номер карты</th>
+          <th scope="col">Отдел</th>
+          <th scope="col">Паспортные данные</th>
+          <th scope="col">Должность</th>
+          <th scope="col">Дата приема на работу</th>
+          <th scope="col">Удалить</th>
+          <th scope="col">Изменить</th>
+        </thead>
+
+        {% for acc in data %}
+          <tr>
+            <td>{{ acc.id }}</td>
+            <td>{{ acc.fam }}</td>
+            <td>{{ acc.name }}</td>
+            <td>{{ acc.otchestvo }}</td>
+            <td>{{ acc.kard_number }}</td>
+            <td>{{ acc.otdel }}</td>
+            <td>{{ acc.passport_number }}</td>
+            <td>{{ acc.id_dolznost }}</td>
+            <td>{{ acc.data_priom }}</td>
+            <td><a href='{% url 'delete_sotrudnik' acc.pk %}' >delete</a></td>
+            <td><a href='{% url 'change_sotrudnik' acc.pk %}' >change</a></td>
+          </tr>
+        {% endfor %}
+    </table>
+
+
+      {% else %}
+      <br>
+        <p>Нет ни одного кортежа</p>
+      {% endif %}
+    </div>
+    {% endblock %}

@@ -4,44 +4,16 @@ from . import models
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
-# Very Basic Example of a Django Form
-
 class SignUpForm(UserCreationForm):
     class Meta():
         model = User
         fields = ('username', 'password1', 'password2')
 
+"""Форма авторизации"""
 class LogInForm(forms.Form):
     username = forms.CharField(max_length=64)
     password = forms.CharField(widget=forms.PasswordInput)
 
-class FormReklama(forms.Form):
-    name = forms.CharField()
-    rekvesit = forms.CharField()
-    mail = forms.EmailField()
-    # test = forms.CharField(label = 'sdfsdf')
-
-    # def clean(self):
-    #     all_clean_data = super().clean()
-    #     fmail = all_clean_data['mail']
-    #     vmail = all_clean_data['test']
-    #     if fmail != vmail:
-    #         raise forms.ValidationError("NOT MATCH")
-
-class NewReklamaForm(forms.ModelForm):
-    class Meta():
-        model = models.Reklama
-        fields = '__all__'
-        help_texts = {
-            'reklama_name': 'Название компании',
-            'rekvesit': 'Реквезиты',              # не работает почему-то     | в документации
-            'mail': 'Email компании help',  # и это                     | такого нет
-        }
-        labels = {
-            'reklama_name': 'Название компании',
-            'rekvesit': 'Реквезиты',
-            'mail': 'Email компании labels',
-        }
 """Управление: Реклама"""
 class ReklamaForm(forms.ModelForm):
     class Meta():
@@ -81,6 +53,39 @@ class SotrudnikForm(forms.ModelForm):
     queryset=models.Dolznost.objects.all(), empty_label=None,
     label='Выберите должность')
     class Meta():
+        model = models.Sotrudnik
+        fields = '__all__'
+        labels = {
+            'fam': 'Фамилия',
+            'name': 'Имя',
+            'otchestvo': 'Отчество',
+            'kard_number': 'Номер карты',
+            'otdel': 'Отдел',
+            'passport_number': 'Паспорт',
+            'data_priom': 'Дата приема на работу',
+        }
+
+"""Управление: Сотрудник"""
+class SearchSotrudnikForm(forms.ModelForm):
+    id_dolznost = forms.ModelChoiceField(
+    queryset=models.Dolznost.objects.all(), empty_label="",
+    label='Выберите должность', required = False)
+    fam = forms.CharField(
+    label='Фамилия', required = False)
+    name = forms.CharField(
+    label='Имя', required = False)
+    otchestvo = forms.CharField(
+    label='Отчество', required = False)
+    kard_number = forms.CharField(
+    label='Номер карты', required = False)
+    otdel = forms.IntegerField(
+    label='Отдел', required = False)
+    #initial = 1
+    passport_number = forms.CharField(
+    label='Номер паспорта', required = False)
+    data_priom = forms.DateField(
+    label='Дата приема на работу', required = False)
+    class Meta:
         model = models.Sotrudnik
         fields = '__all__'
         labels = {

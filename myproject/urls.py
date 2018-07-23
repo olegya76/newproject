@@ -26,7 +26,7 @@ urlpatterns = [
     # auth system
     path('login/', views.loginpage, name='loginpage'),
     path('signup/', views.signup, name='signuppage'),
-    #
+    #Добавление/изменение/удаление основных таблиц
     path('control/', views.control_view, name = 'control_main'),
     path('control/reklama/', views.reklama_control_view, name = 'control_reklama'),
     path('control/reklama/<int:pk>/delete', views.delete_reklama, name='delete_reklama'),
@@ -50,4 +50,8 @@ urlpatterns = [
     path('control/peredacha/', views.peredacha_control_view, name = 'control_peredacha'),
     path('control/peredacha/<int:pk>/delete', views.delete_peredacha, name='delete_peredacha'),
     path('control/peredacha/<int:pk>/change', views.change_peredacha, name='change_peredacha'),
+    #Дополнительные ф-ции
+    path('control/search_sotrudnik', views.search_sotrudnik, name='search_sotrudnik'),
+    path('control/search_efir_in_sotrudnik', views.search_efir_in_sotrudnik, name='search_efir_in_sotrudnik'),
+    path('control/search_sotrudnik_in_efir', views.search_sotrudnik_in_efir, name='search_sotrudnik_in_efir'),
 ]
